@@ -1,0 +1,32 @@
+form
+	width 100%
+	input, select, textarea
+		border none !important
+		width 100%
+		box-sizing border-box !important
+		background #666
+		color white !important
+		font-family $calibri !important
+		&.form-error
+			background lighten(saturate(red, -25), 25) !important
+	input[type=checkbox]
+		box-sizing content-box !important
+		transition background 0.2s
+	.form-row
+		lost-column 1/1
+::-webkit-input-placeholder
+	color white !important
+	font-weight bold !important
+	font-family $calibri
+:-moz-placeholder
+	color white !important
+	font-weight bold !important
+	font-family $calibri
+::-moz-placeholder
+	color white !important
+	font-weight bold !important
+	font-family $calibri
+:-ms-input-placeholder
+	color white !important
+	font-weight bold !important
+	font-family $calibri

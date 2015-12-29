@@ -1,0 +1,25 @@
+// Kal
+
+$blue = #04549e
+$blue2 = #369ecf
+$grey = #777777
+
+$blue-lite = lighten($blue, 10)
+$blue-dark = darken($blue, 10)
+
+$blue2-lite = lighten($blue2, 10)
+$blue2-dark = darken($blue2, 10)
+
+$grey-lite = lighten($grey, 10)
+$grey-dark = darken($grey, 10)
+
+.router-view
+	transition opacity .2s ease
+	&.v-enter, &.v-leave
+		opacity 0
+.fade-transition
+	transition all 0.2s ease;
+	opacity 1
+.fade-enter, .fade-leave
+	opacity 0
+	transition all 0.2s ease;

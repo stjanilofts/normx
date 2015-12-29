@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "browserify-hmr": "^0.3.1",
+    "gulp": "^3.8.8",
+    "laravel-elixir-stylus": "^1.0.1",
+    "laravel-elixir-vueify": "^1.0.1",
+    "vueify": "^7.1.0",
+    "watchify": "^3.6.1"
+  },
+  "scripts": {
+    "dev": "watchify -v -p browserify-hmr -u http://sfh.dev:8000 -t vueify -e resources/assets/js/main.js -o public/js/build.js",
+    "build": "cross-env NODE_ENV=production ./node_modules/watchify/node_modules/.bin/browserify -t vueify -e src/main.js | uglifyjs -c warnings=false -m > build/build.js"
+  },
+  "dependencies": {
+    "bootstrap-sass": "^3.0.0",
+    "jquery": "^2.1.4",
+    "laravel-elixir": "^4.1.0",
+    "normalize.css": "^3.0.3",
+    "vue-resource": "^0.1.17",
+    "vue-router": "^0.7.7"
+  }
+}
