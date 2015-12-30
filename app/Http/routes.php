@@ -8,8 +8,10 @@ Route::post('hafa-samband', 'ContactController@postContact');
 
 Route::group(['middleware'=>'api', 'prefix' => 'api'], function () {
     Route::get('page/{slug?}', 'ApiController@page')->where(['slug' => '.*']);
+    Route::get('product/{slug?}', 'ApiController@product')->where(['slug' => '.*']);
     Route::get('menu', 'ApiController@menu');
-    Route::get('cards', 'ApiController@cards');
+    Route::get('slider', 'ApiController@slider');
+    Route::get('banner', 'ApiController@banner');
 });
 
 Route::group(['middleware'=>'auth', 'prefix' => 'admin'], function () {

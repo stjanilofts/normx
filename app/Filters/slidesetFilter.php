@@ -7,7 +7,7 @@ class slidesetFilter implements FilterInterface
 {
     public function applyFilter(Image $image)
     {
-   		return $image->fit(400, 300, function ($constraint) {
+   		return $image->fit(400, 400, function ($constraint) {
 		    //$constraint->aspectRatio();
 		    //$constraint->upsize();
 		})->encode('jpg', 70);

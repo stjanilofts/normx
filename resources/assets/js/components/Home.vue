@@ -1,24 +1,27 @@
 <template>
 	<div class="Home">
 		<div class="Banner owl-carousel">
-			<div v-for="item in banner_items" class="Banner__item" :style="{ backgroundImage: 'url(/imagecache/slick/' + item + ')' }">
+			<div v-for="item in banner_items" class="Banner__item" :style="{ backgroundImage: 'url(/imagecache/slick/' + item.image + ')' }">
 			</div>
 		</div>
 
 		<div class="Slider--container">
+			<h2>Pottar og laugar</h2>
 			<div class="Slider owl-carousel">
 				<div class="Slider__item" v-for="item in slider_items">
 					<div class="Slider__left">
-						<img :src="'/imagecache/slideset/' + item" />
+						<img :src="'/imagecache/slideset/' + item.image" />
 					</div>
 					<div class="Slider__right">
-						<h4>Nafn á potti</h4>
-						<p>Raworin awoirna wirona w<br>faii awrioawnr aiown <br>rwanroiawnrnoiawrn</p>
-						<a href="#" class="Button Button--alt">Sjá meira</a>
+						<h4>{{ item.title }}</h4>
+						<p>{{ item.content }}</p>
+						<button v-link="{ path: 'vorur/' + item.slug }" class="Button Button--alt">Sjá meira</button>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		{{ data | json }}
 	</div>
 </template>
 
@@ -32,11 +35,21 @@ export default {
 	},
 
 	beforeCompile() {
-		this.banner_items = ['1.jpg', '2.jpg', '3.jpg'];
-		this.slider_items = ['1.jpg', '2.jpg', '3.jpg'];
+		//this.banner_items = ['1.jpg', '2.jpg', '3.jpg'];
 	},
 
 	route: {
+		activate(transition) {
+			var self = this;
+
+			this.update_banner().then(function() {
+				self.update_slider().then(function() {
+					setTimeout(function() {
+						transition.next();
+					}, 0)
+				});
+			});
+		},
 		data(transition) {
 			transition.next();
 		},
@@ -55,7 +68,9 @@ export default {
 				items: 1
 			});
 
+			//console.log('setting slider');
 			$('.Slider').owlCarousel({
+				autoplay: true,
 				nav: false,
 				dots: false,
 				loop: true,
@@ -68,11 +83,26 @@ export default {
 						items: 2
 					}
 				}
-			});
+			})
+
+			//$('.Slider').trigger('refresh.owl.carousel');
 		}))
 	},
 
 	methods: {
+		update_slider() {
+			return this.$http.get('/api/slider/', function(data) {
+				this.$set('slider_items', data);
+				//console.log('updated slider');
+			});
+		},
+
+		update_banner() {
+			return this.$http.get('/api/banner/', function(data) {
+				this.$set('banner_items', data);
+				//console.log('updated slider');
+			});
+		}
 	}
 }
 </script>
@@ -90,8 +120,14 @@ export default {
 		width 100%
 
 .Slider--container
-	padding 1em
+	padding 2em
 	background #EEE url('/img/vatn2.jpg')
+	h2
+		font-weight bold
+		padding-top 0
+		margin-top 0
+		text-align center
+		color white
 .Slider
 	max-width $max-width
 	margin 0 auto
@@ -106,6 +142,11 @@ export default {
 			margin 0
 		lost-utility clearfix
 	&__left, &__right
+		img
+			border-radius 8px
+			border 4px solid $blue2
+			overflow hidden
+			display inline-block
 		lost-column 1/2
 		+large()
 			h4

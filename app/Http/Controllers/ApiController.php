@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Cache;
 use App\Page;
+use App\Product;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -91,6 +92,36 @@ class ApiController extends Controller
         //return Cache::remember('menu', 120, function() {
             return rec();
         //});
+    }
+
+    public function slider()
+    {
+        $products = Product::all();
+
+        foreach($products as &$product) {
+            $product->image = $product->img()->first();
+            $product->content = shortenClean($product->content, 140);
+        }
+
+        return $products;
+    }
+
+    public function banner()
+    {
+        $banners = Page::whereSlug('_forsidumyndir')->first()->getSubs();
+
+        foreach($banners as &$banner) {
+            $banner->image = $banner->img()->first();
+        }
+
+        return $banners;
+    }
+
+    public function product($slug)
+    {
+        //$parts = array_values(array_filter(explode("/", $slug)));
+
+        return Product::whereSlug($slug)->first();
     }
 
     public function cards()

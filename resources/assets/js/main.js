@@ -15,7 +15,7 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAt
 
 import App from './components/App.vue';
 import Login from './components/Login.vue';
-import Pottur from './components/Pottur.vue';
+import Vorur from './components/Vorur.vue';
 import Home from './components/Home.vue';
 import Page from './components/Page.vue';
 import Contact from './components/Contact.vue';
@@ -23,7 +23,7 @@ import Contact from './components/Contact.vue';
 var router = new VueRouter();
 
 router.map({
-	'/': {
+	'/heim': {
 		component: Home
 	},
 	'/admin': {
@@ -32,13 +32,17 @@ router.map({
 	'/hafa-samband': {
 		component: Contact
 	},
-	'/pottur': {
-		component: Pottur
+	'/vorur/*any': {
+		component: Vorur
 	},
 	'/*any': {
 		name: 'page',
 		component: Page
 	}
+});
+
+router.redirect({
+	'*': '/heim'
 });
 
 router.beforeEach(function (transition) {

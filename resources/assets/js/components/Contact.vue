@@ -5,7 +5,7 @@
 			<div class="Page__content">
 				<h1>Hafa samband</h1>
 
-				<form v-on:submit.prevent="onSubmit" v-if="!isSubmitted">
+				<form v-on:submit.prevent="onSubmit" v-if="!isSubmitted" class="Basic">
 					<div class="form-row">
 						<input id="fyrirspurn_nafn"
 							   @focus="clearError"

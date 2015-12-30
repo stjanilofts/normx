@@ -408,12 +408,12 @@ body {
 .slick-slider {
   margin-bottom: 0;
 }
-form {
+form.Basic {
   width: 100%;
 }
-form input,
-form select,
-form textarea {
+form.Basic input,
+form.Basic select,
+form.Basic textarea {
   border: none !important;
   width: 100%;
   box-sizing: border-box !important;
@@ -421,48 +421,48 @@ form textarea {
   color: #fff !important;
   font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif' !important;
 }
-form input.form-error,
-form select.form-error,
-form textarea.form-error {
+form.Basic input.form-error,
+form.Basic select.form-error,
+form.Basic textarea.form-error {
   background: #ef9090 !important;
 }
-form input[type=checkbox] {
+form.Basic input[type=checkbox] {
   box-sizing: content-box !important;
   transition: background 0.2s;
 }
-form .form-row {
+form.Basic .form-row {
   width: calc(99.99% * 1/1 - (30px - 30px * 1/1));
 }
-form .form-row:nth-child(n) {
+form.Basic .form-row:nth-child(n) {
   float: left;
   margin-right: 30px;
   clear: none;
 }
-form .form-row:last-child {
+form.Basic .form-row:last-child {
   margin-right: 0;
 }
-form .form-row:nth-child(1n) {
+form.Basic .form-row:nth-child(1n) {
   margin-right: 0;
 }
-form .form-row:nth-child(1n + 1) {
+form.Basic .form-row:nth-child(1n + 1) {
   clear: left;
 }
-::-webkit-input-placeholder {
+form.Basic ::-webkit-input-placeholder {
   color: #fff !important;
   font-weight: bold !important;
   font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';
 }
-:-moz-placeholder {
+form.Basic :-moz-placeholder {
   color: #fff !important;
   font-weight: bold !important;
   font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';
 }
-::-moz-placeholder {
+form.Basic ::-moz-placeholder {
   color: #fff !important;
   font-weight: bold !important;
   font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';
 }
-:-ms-input-placeholder {
+form.Basic :-ms-input-placeholder {
   color: #fff !important;
   font-weight: bold !important;
   font-family: 'Calibri', 'Candara', 'Segoe', 'Segoe UI', 'Optima', 'Arial', 'sans-serif';

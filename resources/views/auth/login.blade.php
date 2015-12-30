@@ -6,7 +6,7 @@
     <div class="container">
         <div class="Page">
             <div class="Page__content">
-                <form method="POST" action="{{ url('/auth/login') }}">
+                <form class="Basic" method="POST" action="{{ url('/auth/login') }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-row fullwidth">
