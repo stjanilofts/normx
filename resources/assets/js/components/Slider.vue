@@ -5,12 +5,12 @@
 			<div class="Slider owl-carousel">
 				<div class="Slider__item" v-for="item in slider_items">
 					<div class="Slider__left">
-						<img :src="'/imagecache/slideset/' + item.image" />
+						<a v-link="{ path: '/vorur/' + item.slug }"><img :src="'/imagecache/slideset/' + item.image" /></a>
 					</div>
 					<div class="Slider__right">
 						<h4>{{ item.title }}</h4>
 						<p>{{ item.content }}</p>
-						<button v-link="{ path: 'vorur/' + item.slug }" class="Button Button--alt">Sjá meira</button>
+						<button v-link="{ path: '/vorur/' + item.slug }" class="Button Button--alt">Sjá meira</button>
 					</div>
 				</div>
 			</div>
@@ -67,6 +67,7 @@ export default {
 @import '../../stylus/app'
 
 .Slider--container
+	border-top 4px solid $blue
 	padding 2em
 	background #EEE url('/img/vatn2.jpg')
 	h2

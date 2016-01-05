@@ -1,22 +1,22 @@
 <template>
 	<div class="Vorulisti--container">
-		<p>Ef að þú vilt prófa að bæta við aukahlutum getur þú gert það með því að smella á takkann hér fyrir neðan. Það er einnig góð leið til að fá góða hugmynd um lokaverð.</p>
-
 		<button class="Button" @click="showForm">{{ showform_text }}</button>
 
 		<form v-cloak class="Vorulisti">
 			<fieldset v-for="(c, category) in categories">
 				<div class="category">
 					<legend @click="showOptions">{{ category.title }}</legend>
-					<p v-if="category.info">{{ category.info }}</p>
-					<div class="options">
+					<p v-if="category.info">{{ category.info }}<br>
+					<a style="cursor: pointer; margin-bottom: 1em;" @click="showOptions"><strong><i class="fa fa-list"></i> Skoða valmöguleika</strong></a></p>
+					<div class="options" style="display: none;">
 						<div v-for="(i, item) in category.items | orderBy 'price'"
 							 class="Vorulisti__selectable">
 							<div class="Vorulisti__item" :class="[ hasItem(item) ? 'selected' : '' ]">
 								<label>
-									<input type="radio" :name="category.title" @click="addItem(item)" />
+									<input type="radio" :name="category.title" @click="addItem(item, category.title)" />
 									<i class="fa" :class="[ hasItem(item) ? 'fa-check-circle-o' : 'fa-circle-o' ]"></i>
-									<span class="title">{{ item.title }}</span><br>{{ price(item.price) }}
+									<span class="title">{{ item.title }}</span><br>
+									<span class="price">{{ price(item.price) }}</span>
 								</label>
 							</div>
 						</div>
@@ -26,6 +26,10 @@
 
 			<button class="Button" @click.prevent="showForm">{{ showform_text }}</button>
 		</form>
+
+		<!--<pre>
+		{{ chosen | json 4 }}
+		</pre>-->
 
 		<table v-if="chosen.length">
 			<tr>
@@ -41,38 +45,25 @@
 				<td><strong>{{ samtals }}</strong></td>
 		</table>
 
-		<h3>Senda fyrirspurn varðandi pott</h3>
+		<h3>Senda fyrirspurn varðandi {{ product.title }}</h3>
 
-		<form class="Basic">
-			<div>
-				<div class="form-row">
-					<label for="nafn">Nafn</label>
-					<input type="text" v-model="fyrirspurn.nafn">
-				</div>
+		<p>Ef þú velur aukahluti hér fyrir ofan þá fáum við það einnig sent til okkar.</p>
 
-				<div class="form-row">
-					<label for="netfang">Netfang</label>
-					<input type="text" v-model="fyrirspurn.netfang">
-				</div>
-
-				<div class="form-row">
-					<label for="simi">Símanúmer</label>
-					<input type="text" v-model="fyrirspurn.simi">
-				</div>
-
-				<div class="form-row" style="margin-top: 1em;">
-					<button class="Button">Senda</button>
-				</div>
-			</div>
-		</form>
+		<basic-form
+			:titill="'Ég óska eftir meiri upplýsingum varðandi ' + product.title"
+			:extra.sync="chosen"
+		></basic-form>		
 	</div>
 </template>
 
 <script>
+import BasicForm from './_BasicForm.vue';
+
 export default {
-	props: ['baseprice'],
+	props: ['product'],
 
 	components: {
+		BasicForm
 	},
 
 	data() {
@@ -83,13 +74,17 @@ export default {
 				simi: ''
 			},
 
-			showform_text: 'Velja aukahluti',
+			showform_text: 'Sýna aukahluti',
 			chosen: [],
 			categories: [
 				{
 					title: 'Lok',
 					info: 'Veldu lok.',
 					items: [
+						{
+							title: 'Fá ráðgjöf um lok',
+							price: 0
+						},
 						{
 							title: 'Állok standard',
 							price: 104000
@@ -112,6 +107,10 @@ export default {
 					title: 'Hitastýringar',
 					info: 'Veldu hitastýringu.',
 					items: [
+						{
+							title: 'Fá ráðgjöf um hitastýringar',
+							price: 0
+						},
 						{
 							title: 'Sturtutæki',
 							price: 12900
@@ -144,8 +143,12 @@ export default {
 				},
 				{
 					title: 'Ljós',
-					info: 'Veldu ljós',
+					info: 'Veldu ljós.',
 					items: [
+						{
+							title: 'Fá ráðgjöf um ljós',
+							price: 0
+						},
 						{
 							title: 'Balboa ljós, 1 stk með spenni, rofa og 12v peru',
 							price: 21800
@@ -183,7 +186,7 @@ export default {
 				if(item) {
 					return total + item.price
 				}
-			}, self.baseprice);
+			}, self.product.price);
 
 			return this.price(price);
 		}
@@ -194,32 +197,48 @@ export default {
 			if($('.Vorulisti').is(':hidden')) {
 				this.showform_text = 'Fela aukahluti';
 			} else {
-				this.showform_text = 'Velja aukahluti';
+				this.showform_text = 'Sýna aukahluti';
 			}
 
 			$('.Vorulisti').slideToggle('fast');
 		},
 
 		showOptions(e) {
-			//$el = $(e.target);
-			//$el.siblings('div.options').slideToggle('fast');
+			$el = $(e.target);
+			$el.parents('div.category').find('div.options').slideToggle('fast');
 		},
 
 		hasItem(item) {
-			var found = false
-			
 			for(var i = 0; i <= this.chosen.length; i++) {
-				if(this.chosen[i] && (this.chosen[i].title === item.title)) {
-					found = true
+				if(this.chosen[i] && (this.chosen[i].title === item.title) && this.chosen[i].type === item.type) {
+					return true
 				}
 			}
-
-			return found
 		},
 
-		addItem(item) {
-			if(this.hasItem(item)) {
-				this.chosen.$remove(item)
+		hasType(type) {
+			for(var i = 0; i <= this.chosen.length; i++) {
+				if(this.chosen[i] && (this.chosen[i].type === type)) {
+					return true
+				}
+			}
+		},
+
+		replaceType(item) {
+			for(var i = 0; i <= this.chosen.length; i++) {
+				if(this.chosen[i] && (this.chosen[i].type === item.type) && (this.chosen[i].title === item.title)) {
+					this.chosen.$remove(item)
+				} else if(this.chosen[i] && (this.chosen[i].type === item.type)) {
+					this.chosen.$set(i, item)
+				}
+			}
+		},
+
+		addItem(item, type) {
+			item.type = type
+
+			if(this.hasType(type)) {
+				this.replaceType(item)
 			} else {
 				this.chosen.push(item)
 			}
@@ -246,6 +265,8 @@ table
 		border-bottom 1px solid #EEE
 	td:first-child
 		width 80%
+	th:last-child
+		text-align right
 	td:last-child
 		text-align right
 
@@ -280,6 +301,8 @@ table
 	&__item
 		span.title
 			font-weight bold
+		span.price
+			font-weight normal
 		padding 0.5em
 		margin-bottom 0.5em
 		transition background 0.3s

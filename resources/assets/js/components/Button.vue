@@ -43,4 +43,7 @@ export default {
 		&:hover, &:focus, &:active
 			transition background 0.2s !important
 			background #EEE
+	&--small
+		font-size 0.8em !important
+		padding 0.25em 1em !important
 </style>

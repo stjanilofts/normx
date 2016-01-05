@@ -35,6 +35,18 @@ export default {
 	},
 
 	ready() {
+		var self = this
+
+		/*$(document).ready(function() {
+			$('body').click(function(event) {
+			    if(!$(event.target).closest('.Menu__bottom').length) {
+		            if(!self.showNav) {
+		            	self.toggleNav()
+			        }
+			    }   
+			})
+		});*/
+
 		this.$http.get('/api/menu', function(data) {
 			this.$set('items', data);
 		});

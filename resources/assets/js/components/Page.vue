@@ -8,10 +8,14 @@
 				{{{ content }}}
 			</div>
 		</div>
+
+		<slider></slider>
 	</div>
 </template>
 
 <script>
+import Slider from './Slider.vue';
+
 export default {
 	data() {
 		return {
@@ -19,6 +23,10 @@ export default {
 			title: '',
 			submenu: []
 		}
+	},
+
+	components: {
+		Slider
 	},
 
 	route: {
