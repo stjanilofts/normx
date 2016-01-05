@@ -17,8 +17,8 @@ return [
     'hlutir' => [
         'Page',
         //'News',
-        //'Category',
-        //'Product',
+        'Category',
+        'Product',
     ],
 
     /*

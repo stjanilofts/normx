@@ -118,12 +118,18 @@ class DatabaseSeeder extends Seeder
 
 
 
+        $pottar = factory(\App\Category::class)->create([
+            'title' => 'Pottar',
+            'slug' => 'pottar',
+        ]);
+
 
 
 
         factory(\App\Product::class)->create([
             'title' => 'Snorralaug',
             'slug' => 'snorralaug',
+            'category_id' => $pottar->id,
             'content' => '<p>2000 Litrar.<br>
 Setlaug fyrir allt að 8-10 manns.<br>
 Íslensk framleiðsla.<br>
@@ -142,6 +148,7 @@ Efnisþykkt er ca 7-10mm.<br>
         factory(\App\Product::class)->create([
             'title' => 'Grettislaug',
             'slug' => 'grettislaug',
+            'category_id' => $pottar->id,
             'content' => '<p>1500 Lítrar.<br>
 Setlaug fyrir allt að 5-7 manns.<br>
 Íslensk framleiðsla.<br>
@@ -160,6 +167,7 @@ Efnisþykkt er ca 7-10mm.<br>
         factory(\App\Product::class)->create([
             'title' => 'Geirslaug',
             'slug' => 'geirslaug',
+            'category_id' => $pottar->id,
             'content' => '<p>1800 Lítrar.<br>
 Setlaug fyrir allt að 7-9 manns.<br>
 Íslensk framleiðsla.<br>
@@ -178,6 +186,7 @@ Efnisþykkt er ca 7-10mm.<br>
         factory(\App\Product::class)->create([
             'title' => 'Unnarlaug',
             'slug' => 'unnarlaug',
+            'category_id' => $pottar->id,
             'content' => '<p>2050 Litrar.<br>
 Setlaug fyrir allt að 6 manns.<br>
 Íslensk framleiðsla.<br>
@@ -196,6 +205,7 @@ Efnisþykkt er ca 7-10mm.<br>
         factory(\App\Product::class)->create([
             'title' => 'Gvendarlaug',
             'slug' => 'gvendarlaug',
+            'category_id' => $pottar->id,
             'content' => '<p>1200 Litrar.<br>
 Setlaug fyrir allt að 3-5 manns.<br>
 Íslensk framleiðsla.<br>

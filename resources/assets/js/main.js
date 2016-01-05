@@ -15,7 +15,7 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAt
 
 import App from './components/App.vue';
 import Login from './components/Login.vue';
-import Vorur from './components/Vorur.vue';
+import Vara from './components/Vara.vue';
 import Home from './components/Home.vue';
 import Page from './components/Page.vue';
 import Contact from './components/Contact.vue';
@@ -33,7 +33,7 @@ router.map({
 		component: Contact
 	},
 	'/vorur/*any': {
-		component: Vorur
+		component: Vara
 	},
 	'/*any': {
 		name: 'page',

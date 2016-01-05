@@ -1,45 +1,94 @@
 <template>
-	<div>
+	<div class="Vorulisti--container">
 		<p>Ef að þú vilt prófa að bæta við aukahlutum getur þú gert það með því að smella á takkann hér fyrir neðan. Það er einnig góð leið til að fá góða hugmynd um lokaverð.</p>
 
-		<button class="Button">Bæta við aukahluti</button>
-
-		<h2>{{ samtals }}</h2>
+		<button class="Button" @click="showForm">{{ showform_text }}</button>
 
 		<form v-cloak class="Vorulisti">
 			<fieldset v-for="(c, category) in categories">
-				<legend>{{ category.title }}</legend>
-
-				<div>
-					<div v-for="(i, item) in category.items | orderBy 'price'"
-						 class="Vorulisti__selectable">
-						<div class="Vorulisti__item" :class="{ 'selected': selected(category, item) }">
-							<label :class="{ 'selected': selected(category, item) }">
-								<input type="radio" :name="category.title" v-model="extras[category.title]" :value="item" />
-									<i class="fa fa-circle-o"
-									   :class="{
-									   		'fa-circle-o': !extras[category.title] || extras[category.title].title != item.title,
-									   		'fa-check-circle-o': selected(category, item)  }
-									   "></i>
+				<div class="category">
+					<legend @click="showOptions">{{ category.title }}</legend>
+					<p v-if="category.info">{{ category.info }}</p>
+					<div class="options">
+						<div v-for="(i, item) in category.items | orderBy 'price'"
+							 class="Vorulisti__selectable">
+							<div class="Vorulisti__item" :class="[ hasItem(item) ? 'selected' : '' ]">
+								<label>
+									<input type="radio" :name="category.title" @click="addItem(item)" />
+									<i class="fa" :class="[ hasItem(item) ? 'fa-check-circle-o' : 'fa-circle-o' ]"></i>
 									<span class="title">{{ item.title }}</span><br>{{ price(item.price) }}
-							</label>
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
 			</fieldset>
+
+			<button class="Button" @click.prevent="showForm">{{ showform_text }}</button>
 		</form>
-		<pre>{{ extras | json 4 }}</pre>
+
+		<table v-if="chosen.length">
+			<tr>
+				<th>Valdir aukahlutir</th>
+				<th>Verð</th>
+			</tr>
+			<tr v-for="(i, item) in chosen" v-if="item != null" track-by="$index">
+				<td>{{ item.title }}</td>
+				<td>{{ price(item.price) }}</td>
+			</tr>
+			<tr>
+				<td><strong>Samtals með potti</strong></td>
+				<td><strong>{{ samtals }}</strong></td>
+		</table>
+
+		<h3>Senda fyrirspurn varðandi pott</h3>
+
+		<form class="Basic">
+			<div>
+				<div class="form-row">
+					<label for="nafn">Nafn</label>
+					<input type="text" v-model="fyrirspurn.nafn">
+				</div>
+
+				<div class="form-row">
+					<label for="netfang">Netfang</label>
+					<input type="text" v-model="fyrirspurn.netfang">
+				</div>
+
+				<div class="form-row">
+					<label for="simi">Símanúmer</label>
+					<input type="text" v-model="fyrirspurn.simi">
+				</div>
+
+				<div class="form-row" style="margin-top: 1em;">
+					<button class="Button">Senda</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </template>
 
 <script>
 export default {
+	props: ['baseprice'],
+
+	components: {
+	},
+
 	data() {
 		return {
-			extras: {},
+			fyrirspurn: {
+				nafn: '',
+				netfang: '',
+				simi: ''
+			},
+
+			showform_text: 'Velja aukahluti',
+			chosen: [],
 			categories: [
 				{
 					title: 'Lok',
+					info: 'Veldu lok.',
 					items: [
 						{
 							title: 'Állok standard',
@@ -61,6 +110,7 @@ export default {
 				},
 				{
 					title: 'Hitastýringar',
+					info: 'Veldu hitastýringu.',
 					items: [
 						{
 							title: 'Sturtutæki',
@@ -94,6 +144,7 @@ export default {
 				},
 				{
 					title: 'Ljós',
+					info: 'Veldu ljós',
 					items: [
 						{
 							title: 'Balboa ljós, 1 stk með spenni, rofa og 12v peru',
@@ -124,39 +175,54 @@ export default {
 	ready() {
 	},
 
-    /*filters: {
-        samtals(list) {
-			return list.reduce(function(total, item) {
-			    return total + 123
-			}, 0)
-		}
-    },*/
-
 	computed: {
 		samtals() {
-			if(this.extras.length > 0) {
-				this.extras.forEach(function(item) {
-					console.log(item.title)
-				});
-			}
+			var self = this;
 
-			return 123
-			/*if(this.extras.length) {
-				return this.extras.filter(function(item) {
-					return item.reduce(function(total, item) {
-						return total + item.price
-					}, 0)
-				})
-			}*/
+			var price = this.chosen.reduce(function(total, item) {
+				if(item) {
+					return total + item.price
+				}
+			}, self.baseprice);
+
+			return this.price(price);
 		}
 	},
 
 	methods: {
-		onSelect(e) {
+		showForm() {
+			if($('.Vorulisti').is(':hidden')) {
+				this.showform_text = 'Fela aukahluti';
+			} else {
+				this.showform_text = 'Velja aukahluti';
+			}
+
+			$('.Vorulisti').slideToggle('fast');
 		},
 
-		selected(category, item) {
-			return (this.extras[category.title] && this.extras[category.title].title) == item.title
+		showOptions(e) {
+			//$el = $(e.target);
+			//$el.siblings('div.options').slideToggle('fast');
+		},
+
+		hasItem(item) {
+			var found = false
+			
+			for(var i = 0; i <= this.chosen.length; i++) {
+				if(this.chosen[i] && (this.chosen[i].title === item.title)) {
+					found = true
+				}
+			}
+
+			return found
+		},
+
+		addItem(item) {
+			if(this.hasItem(item)) {
+				this.chosen.$remove(item)
+			} else {
+				this.chosen.push(item)
+			}
 		},
 
 		price(x) {
@@ -172,43 +238,68 @@ export default {
 @import '../../stylus/app'
 //@import '../../stylus/variables'
 //@import '../../stylus/media-queries'
+.Vorulisti--container
+	lost-utility clearfix
+
+table
+	tr
+		border-bottom 1px solid #EEE
+	td:first-child
+		width 80%
+	td:last-child
+		text-align right
 
 .Vorulisti
+	display none
 	fieldset
-		padding 1em
+		padding 0
 		legend
-			margin-bottom 2em
-			margin-top 2em
+			border-bottom 2px solid $blue2
+			margin-top 0
+			padding-bottom 0.5em
+			margin-bottom 0.5em
+			padding-top 0
+			cursor pointer
 			display block
-			font-size 1.6em
+			width 100%
+			font-size 1.8em
 			text-transform uppercase
-		background #FFF
 		border 0px solid white
 		margin 0
-		padding 0
 		margin-top 1em
 		margin-bottom 1em
 		padding-bottom 1em
-	&__selectable
+	/*&__selectable
 		lost-waffle 1/4 4 1em
 		+large()
 			lost-waffle 1/3 3 1em
 		+medium()
 			lost-waffle 1/2 2 1em
 		+small()
-			lost-waffle 1/1 1 1em
+			lost-waffle 1/1 1 1em*/
 	&__item
 		span.title
 			font-weight bold
-		padding 1em
+		padding 0.5em
+		margin-bottom 0.5em
+		transition background 0.3s
+		border-radius 8px
 		&.selected
 			color white
-			background $blue 
+			background $blue2
 		label
+			i
+				&.greenify
+					color green
+			display block
 			cursor pointer
 		input
 			display none
 
 [v-cloak]
 	display none
+
+form
+	label
+		font-weight bold
 </style>
