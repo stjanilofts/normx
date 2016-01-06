@@ -1,5 +1,10 @@
 <?php
 
+Route::get('hey', function() {
+    $pottar = \App\Category::where('slug', 'pottar')->first()->products;
+    dd($pottar);
+});
+
 Route::get('/', function() {
 	return view('frontend.layout');
 });
@@ -10,7 +15,7 @@ Route::group(['middleware'=>'api', 'prefix' => 'api'], function () {
     Route::get('page/{slug?}', 'ApiController@page')->where(['slug' => '.*']);
     Route::get('product/{slug?}', 'ApiController@product')->where(['slug' => '.*']);
     Route::get('menu', 'ApiController@menu');
-    Route::get('slider', 'ApiController@slider');
+    Route::get('pottar', 'ApiController@pottar');
     Route::get('banner', 'ApiController@banner');
 });
 

@@ -24,12 +24,22 @@ class ContactController extends Controller
 
     public function postContact(ContactRequest $request)
     {
+        $extras = [];
+
+        if($request->has('extras')) {
+            foreach($request->get('extras') as $extra) {
+                $extras[] = $extra;
+            }
+        }
+
         $fyrirspurn = [
             'nafn' => ucwords($request->get('nafn')),
             'netfang' => trim(strtolower($request->get('netfang'))),
             'simi' => trim($request->get('simi')),
             'titill' => trim($request->get('titill')),
             'skilabod' => trim($request->get('skilabod')),
+            'extras' => $extras,
+            'column_keys' => ['Titill' => 'title', 'Verð' => 'price'],
         ];
     
         Mail::send('emails.contact', $fyrirspurn, function ($m) use ($fyrirspurn) {

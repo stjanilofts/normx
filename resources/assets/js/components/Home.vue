@@ -8,7 +8,7 @@
 
 			<div class="Boxes">
 				<div class="Boxes__inner">
-					<a class="Box" href="#">
+					<a class="Box" v-link="{ path: '/heitir-pottar' }">
 						<span class="Box__content">
 							Heitir pottar
 						</span>
@@ -16,13 +16,13 @@
 
 					<a class="Box" href="#">
 						<span class="Box__content">
-							Kamínur
+							Lok á potta
 						</span>
 					</a>
 
-					<a class="Box" href="#">
+					<a class="Box" v-link="{ path: '/kaminur' }">
 						<span class="Box__content">
-							Annað
+							Kamínur
 						</span>
 					</a>
 				</div>
@@ -126,6 +126,8 @@ export default {
 		max-width 1000px
 		margin 0 auto
 	.Box
+		border-radius 3px
+		box-shadow 1px 1px 2px rgba(0,0,0,0.2)
 		text-decoration none
 		&:hover
 			text-decoration none

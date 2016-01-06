@@ -7,6 +7,6 @@ class cardFilter implements FilterInterface
 {
     public function applyFilter(Image $image)
     {
-   		return $image->fit(640, 480);
+   		return $image->fit(400, 400);
     }
 }

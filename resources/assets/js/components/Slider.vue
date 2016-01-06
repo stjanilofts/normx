@@ -5,12 +5,12 @@
 			<div class="Slider owl-carousel">
 				<div class="Slider__item" v-for="item in slider_items">
 					<div class="Slider__left">
-						<a v-link="{ path: '/vorur/' + item.slug }"><img :src="'/imagecache/slideset/' + item.image" /></a>
+						<a v-link="{ path: '/' + item.path }"><img :src="'/imagecache/slideset/' + item.image" /></a>
 					</div>
 					<div class="Slider__right">
 						<h4>{{ item.title }}</h4>
 						<p>{{ item.content }}</p>
-						<button v-link="{ path: '/vorur/' + item.slug }" class="Button Button--alt">Sjá meira</button>
+						<button v-link="{ path: '/' + item.path }" class="Button Button--alt">Sjá meira</button>
 					</div>
 				</div>
 			</div>
@@ -54,7 +54,7 @@ export default {
 
 	methods: {
 		update_slider() {
-			return this.$http.get('/api/slider/', function(data) {
+			return this.$http.get('/api/pottar/', function(data) {
 				this.$set('slider_items', data);
 				//console.log('updated slider');
 			});

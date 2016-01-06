@@ -51,7 +51,8 @@
 
 		<basic-form
 			:titill="'Ég óska eftir meiri upplýsingum varðandi ' + product.title"
-			:extra.sync="chosen"
+			:extras.sync="chosen"
+			:product="product"
 		></basic-form>		
 	</div>
 </template>
@@ -74,7 +75,7 @@ export default {
 				simi: ''
 			},
 
-			showform_text: 'Sýna aukahluti',
+			showform_text: 'Sýna aukahluti +',
 			chosen: [],
 			categories: [
 				{
@@ -195,9 +196,9 @@ export default {
 	methods: {
 		showForm() {
 			if($('.Vorulisti').is(':hidden')) {
-				this.showform_text = 'Fela aukahluti';
+				this.showform_text = 'Fela aukahluti -';
 			} else {
-				this.showform_text = 'Sýna aukahluti';
+				this.showform_text = 'Sýna aukahluti +';
 			}
 
 			$('.Vorulisti').slideToggle('fast');
@@ -263,8 +264,10 @@ export default {
 table
 	tr
 		border-bottom 1px solid #EEE
+	td
+		vertical-align top
 	td:first-child
-		width 80%
+		width 70%
 	th:last-child
 		text-align right
 	td:last-child

@@ -14,19 +14,21 @@
 					
 					<div style="margin-bottom: 2em; display: inline-block; width: 100%;">
 						<div class="Product__left">
-							<img :src="'/imagecache/product/' + product.images[0].name" />
+							<span class="Product__image">
+								<img :src="'/imagecache/product/' + product.images[0].name" />
+							</span>
 						</div>
 
 						<div class="Product__right">
 							<div class="inner">
 								<h3><strong>Lýsing</strong></h3>
 								{{{ product.content }}}
-								<strong>Verð {{ price(product.price) }}</strong>
+								<strong v-if="product.price > 0">Verð {{ price(product.price) }}</strong>
 							</div>
 						</div>
 					</div>
 
-					<div class="Product__full">
+					<div class="Product__full" v-if="showFyrirspurn">
 						<fyrirspurn :product="product"></fyrirspurn>
 					</div>
 				</div>
@@ -44,7 +46,8 @@ import Slider from './Slider.vue';
 export default {
 	data() {
 		return {
-			product: []
+			product: [],
+			showFyrirspurn: false
 		}
 	},
 
@@ -64,7 +67,12 @@ export default {
 
 	methods: {
 		getProduct() {
+			if(this.$route.params.any.indexOf('pottar') > -1) {
+				this.showFyrirspurn = true
+			}
+
 			return this.$http.get('/api/product/' + this.$route.params.any, function(data) {
+				console.log(data)
 				this.$set('product', data);
 			});
 		},
@@ -94,6 +102,14 @@ export default {
 	lost-utility clearfix
 	margin 0 auto
 	padding-bottom 1em
+	&__image
+		text-align center
+		display block
+		width 100%
+		img
+			max-width 100%
+			max-height 800px
+			width auto !important
 	&__container
 		border-radius 8px
 		border 4px solid $blue2
@@ -111,8 +127,6 @@ export default {
 		lost-column 1/2 2 0px
 		+small()
 			lost-column 1/1 1 0px
-		img
-			width 100%
 	&__right
 		font-size 1.2em
 		+small()

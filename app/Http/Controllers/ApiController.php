@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Cache;
 use App\Page;
 use App\Product;
+use App\Category;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -47,11 +48,29 @@ class ApiController extends Controller
                     }
                 }
 
+                // Spes til að ná í vörur tengdar þessari content síðu...
+                $map = [
+                    'kaminur' => 'kaminur',
+                    'heitir-pottar' => 'pottar',
+                ];
+
+                if(array_key_exists($page->slug, $map)) {
+                    $page->products = Category::where('slug', $map[$page->slug])->first()->products;
+                    if($page->products) {
+                        foreach($page->products as &$product) {
+                            $product->cmscontent = cmsContent($product);
+                            $product->short = shortenClean($product->content, 140);
+                            $product->path = 'vorur/'.$map[$page->slug].'/'.$product->slug;
+                            $product->image = $product->img()->first();
+                        }
+                    }
+                }
+
                 if(!empty($submenu)) {
                     if(count($submenu) > 1) {
                         $page->submenu = $submenu;
                     }
-                }                
+                }
 
                 $page->cmscontent = cmsContent($page);
 
@@ -94,16 +113,18 @@ class ApiController extends Controller
         //});
     }
 
-    public function slider()
+    public function pottar()
     {
-        $products = Product::all();
+        $category = \App\Category::where('slug', 'pottar')->first();
+        $pottar = $category->products;
 
-        foreach($products as &$product) {
+        foreach($pottar as &$product) {
             $product->image = $product->img()->first();
             $product->content = shortenClean($product->content, 140);
+            $product->path = 'vorur/'.$category->slug.'/'.$product->slug;
         }
 
-        return $products;
+        return $pottar;
     }
 
     public function banner()
@@ -120,8 +141,10 @@ class ApiController extends Controller
     public function product($slug)
     {
         //$parts = array_values(array_filter(explode("/", $slug)));
+        $parts = array_values(array_filter(explode("/", $slug)));
+        $last = $parts[count($parts) - 1];
 
-        return Product::whereSlug($slug)->first();
+        return Product::whereSlug($last)->first();
     }
 
     public function cards()

@@ -92,7 +92,7 @@
 
 <script>
 export default {
-	props: ['titill', 'extra'],
+	props: ['titill', 'extras', 'product'],
 
 	data() {
 		return {
@@ -106,7 +106,8 @@ export default {
 				netfang: '',
 				simi: '',
 				titill: '',
-				skilabod: ''
+				skilabod: '',
+				extras: ''
 			},
 
 			errors: {
@@ -153,7 +154,8 @@ export default {
 				netfang: '',
 				simi: '',
 				titill: '',
-				skilabod: ''
+				skilabod: '',
+				extras: ''
 			};
 
 			this.errors = {
@@ -183,6 +185,9 @@ export default {
     				self.dots = '';
     			}
     		}, 150);
+
+    		this.extras.push({title: this.product.title, price: this.product.price})
+    		this.fyrirspurn.extras = this.extras
 
     		this.timer = setTimeout(function() {
     			self.$http.post('/hafa-samband', self.fyrirspurn, function(data, status, request) {

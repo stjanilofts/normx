@@ -390,6 +390,13 @@ body h6 {
 body {
   background: #fff;
 }
+body a {
+  color: #369ecf;
+  transition: color 0.2s;
+}
+body a:hover {
+  color: #04549e;
+}
 .container {
   *zoom: 1;
   max-width: 1400px;

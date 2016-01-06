@@ -6,6 +6,10 @@
 				<h1>{{ title }}</h1>
 			
 				{{{ content }}}
+
+				<div class="Cards">
+					<card v-for="item in cards" :item="item"></card>
+				</div>
 			</div>
 		</div>
 
@@ -15,23 +19,32 @@
 
 <script>
 import Slider from './Slider.vue';
+import Card from './Card.vue';
 
 export default {
 	data() {
 		return {
 			content: '',
 			title: '',
-			submenu: []
+			cards: [],
+			submenu: [],
+			allSet: false
 		}
 	},
 
 	components: {
-		Slider
+		Slider,
+		Card
 	},
 
 	route: {
 		data({ to }) {
-			return this.update();
+			var self = this
+			return this.update().then(function() {
+				$(function() {
+					self.allSet = true
+				});
+			});
 		}
 	},
 
@@ -40,9 +53,13 @@ export default {
 			return this.$http.get('/api/page/' + this.$route.params.any, function(data) {
 				this.$set('content', data.cmscontent);
 				this.$set('submenu', data.submenu);
+				this.$set('cards', data.products);
 				this.$set('title', data.title);
 			});
 		}
+	},
+
+	ready() {
 	}
 }
 </script>
